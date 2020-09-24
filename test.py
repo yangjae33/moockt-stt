@@ -1,8 +1,10 @@
-
-
 from google.cloud import speech_v1
 from google.cloud.speech_v1 import enums
+from konlpy.tag import Okt
 import os
+import csv
+
+okt = Okt()
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="/Users/mac/Desktop/key/Moockt-STT-f2ea661c8c81.json"
 
 def sample_long_running_recognize(storage_uri):
@@ -41,23 +43,35 @@ def sample_long_running_recognize(storage_uri):
     print(u"Waiting for operation to complete...")
     response = operation.result()
 
+    f = open("./data_output.txt",mode='wt')
+    cf = open("./data_output.csv", 'w')
+    wr = csv.writer(cf)
     for result in response.results:
         # First alternative is the most probable result
         alternative = result.alternatives[0]
         print(u"Transcript: {}".format(alternative.transcript))
         for word in alternative.words:
+            lst = []
             print(u"Word: {}".format(word.word))
-            
+            f.write(word.word)
+            f.write(" ")
+            lst.append(word.word)
             print(
                 u"Start time: {} seconds {} nanos".format(
                     word.start_time.seconds, word.start_time.nanos
                 )
             )
+            f.write(str(word.start_time.seconds))
+            lst.append(word.start_time.seconds)
+            f.write('\n')
             print(
                 u"End time: {} seconds {} nanos".format(
                     word.end_time.seconds, word.end_time.nanos
                 )
             )
+            wr.writerow(lst)
+    f.close()
+    cf.close()
     # The first result includes start and end time word offsets
 
     # result = response.results[0]
@@ -78,6 +92,7 @@ def sample_long_running_recognize(storage_uri):
     #         )
     #     )
 
-storage_uri = 'gs://moockt/operating-system-8-1.flac'
+#storage_uri = 'gs://moockt/operating-system-8-1.flac'
+storage_uri = 'gs://moockt/lec1.flac'
 
 sample_long_running_recognize(storage_uri)
