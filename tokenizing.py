@@ -22,20 +22,32 @@ content = ""
 #             lst.append(row[1])
 #             wcfwriter.writerow(lst)
 
-cf = open("data_tokenized.csv",mode = "r")
-cfreader = csv.reader(cf,delimiter=",")
-dict = dict()
-for row in cfreader:
-    key = row[0]
-    val = row[1]
-    if str(key) not in dict:
-        dict[str(key)] = []
-    dict[str(key)].append(val)
+# cf = open("data_tokenized.csv",mode = "r")
+# cfreader = csv.reader(cf,delimiter=",")
+# dict = dict()
+# for row in cfreader:
+#     key = row[0]
+#     val = row[1]
+#     if str(key) not in dict:
+#         dict[str(key)] = []
+#     dict[str(key)].append(val)
 
-fw = open('script_word.pickle','wb')
-pickle.dump(dict,fw)
+# fw = open('script_word.pickle','wb')
+# pickle.dump(dict,fw)
 
 fr = open('script_word.pickle','rb')
 loaded = pickle.load(fr)
 
-print(len(loaded['제일']))
+print(loaded['제일'])
+answer = ""
+for ts in loaded['제일']:
+    answer = answer+str(ts)+" "
+
+print(answer)
+
+# data = dict()
+# data['contents'] = ">안녕"
+# if len(data['contents'])>0 and data['contents'][0]=='>':
+#     print(data['contents'])
+#     print(data['contents'][1:])
+
